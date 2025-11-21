@@ -15,10 +15,18 @@ Web:
 
 因macos不支持内录系统音频，您需要安装[BlackHole](https://github.com/ExistentialAudio/BlackHole) （audiorelay会自动选择BlackHole作为捕获输入源）
 
-若您的系统没有[Portaudio](https://www.portaudio.com/)依赖导致运行异常您可能需要
+若您的系统没有[Portaudio](https://www.portaudio.com/)依赖导致运行异常您可能需要以下帮助
 
 ```bash
+macos:
+
 brew install portaudio
+```
+
+```bash
+windows:
+
+pacman -S mingw-w64-x86_64-portaudio
 ```
 
 ### 启动示例
