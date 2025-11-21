@@ -71,7 +71,7 @@ Audio Status: Streaming | Frames: 4719 | Buffer: 2048 | Total: 18.1 MB | Rate: 1
 
 | 指标        | 说明                 | 示例值             |
 | :---------- | :------------------- | :----------------- |
-| **Status**  | 区别间隔无声帧       | Streamning/ Silent |
+| **Status**  | 区别无声帧时段  静音状态时自动节流     | Streamning/ Silent |
 | **Frames**  | 处理的音频帧总数     | 4719               |
 | **Buffer**  | 实际使用的缓冲区大小 | 2048               |
 | **Total**   | 累计传输数据量       | 18.1 MB            |
