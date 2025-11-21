@@ -11,7 +11,7 @@ Web:
 
 ### 可能的预先准备
 
-⚠️：仅在macos13.7.4上通过
+⚠️：仅在macos13.7.4 / windows11 上通过
 
 因macos不支持内录系统音频，您需要安装[BlackHole](https://github.com/ExistentialAudio/BlackHole) （audiorelay会自动选择BlackHole作为捕获输入源）
 
