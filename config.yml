@@ -1,0 +1,22 @@
+server:
+  port: "12345"  # TCP监听端口
+  http_port: "8888"  # HTTP服务器端口
+
+audio:
+  sample_rate: 48000    # 采样率
+  channels: 2           # 声道数
+  buffer_size: 0     # 缓冲区大小 为0时自动计算
+  device_name: ""       # 指定设备名称
+  auto_select: false    # 选择系统默认输入设备
+  prefer_blackhole: true
+
+processing:
+  silence_threshold: 1000
+  volume_multiplier: 1.0
+  clip_threshold: 28000
+
+protocols:
+  tcp:
+    enabled: true  # TCP协议（如果需要的话）
+  http:
+    enabled: true  # HTTP协议

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio Relay Stream</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .status {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.2em;
+            border: 2px solid;
+        }
+        
+        .connected {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        
+        .audio-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .audio-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        audio {
+            width: 100%;
+            max-width: 600px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .info-box {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .info-box h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .info-box li {
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .info-box li:last-child {
+            border-bottom: none;
+        }
+        
+        .info-box a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .info-box a:hover {
+            text-decoration: underline;
+        }
+        
+        code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎧 Audio Relay Stream</h1>
+            <p class="subtitle">High Quality Real-time Audio Streaming</p>
+        </div>
+        
+        <div class="status connected">
+             Ready - High Quality WAV Audio Stream
+        </div>
+        
+        <div class="audio-section">
+            <h3>🎵 Live Audio Stream</h3>
+            <audio id="audioStream" controls autoplay>
+                <source src="/stream.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="restartAudio()">
+                    🔄 Restart Stream
+                </button>
+                <a href="/stream.wav" target="_blank" class="btn btn-success">
+                    🔗 Open in New Tab
+                </a>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="clientCount">0</div>
+                <div class="stat-label">Connected Clients</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="sampleRate">48000</div>
+                <div class="stat-label">Sample Rate (Hz)</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="channels">2</div>
+                <div class="stat-label">Channels</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="uptime">0</div>
+                <div class="stat-label">Server Uptime (s)</div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>Stream Information:</h3>
+            <p><strong>Format:</strong> 16-bit PCM WAV</p>
+            <p><strong>Sample Rate:</strong> <span id="sampleRate">48000</span> Hz</p>
+            <p><strong>Channels:</strong> <span id="channels">2</span></p>
+            <p><strong>Buffer Size:</strong> <span id="bufferSize">1024</span> samples (actual: <span id="actualBufferSize">1024</span>)</p>
+            <p><strong>Quality:</strong> High Quality, Low Latency</p>
+            <p><strong>Compatibility:</strong> Works with all media players and browsers</p>
+            <p><strong>Stream URL:</strong> <code id="streamUrl">http://localhost:8080/stream.wav</code></p>
+        </div>
+
+
+        <div class="info-box">
+            <h3>🔧 How to Use</h3>
+            <ul>
+                <li><strong>Web Browser:</strong> The audio player above will automatically play the stream</li>
+                <li><strong>Media Players:</strong> Open the stream URL in VLC, QuickTime, Windows Media Player, etc.</li>
+                <li><strong>Command Line:</strong> Use <code>ffplay http://localhost:8080/stream.wav</code> or <code>mplayer http://localhost:8080/stream.wav</code></li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h3>🔗 Useful Links</h3>
+            <ul>
+                <li><a href="/status" target="_blank">/status</a> - Server status information</li>
+                <li><a href="/debug" target="_blank">/debug</a> - Debug information</li>
+                <li><a href="/stream.wav" target="_blank">/stream.wav</a> - Direct audio stream link</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>Audio Relay Stream Server • Built with Go</p>
+        </div>
+    </div>
+
+    <script>
+        // Update stream URL with actual host
+        document.getElementById('streamUrl').textContent = window.location.origin + '/stream.wav';
+
+        function restartAudio() {
+            const audio = document.getElementById('audioStream');
+            const wasPlaying = !audio.paused;
+            
+            audio.pause();
+            audio.currentTime = 0;
+            
+            if (wasPlaying) {
+                audio.play().catch(e => {
+                    console.log('Audio play failed:', e);
+                    showNotification('Failed to play audio. Please click play manually.', 'error');
+                });
+            }
+            
+            showNotification('Audio stream restarted', 'success');
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: bold;
+                z-index: 1000;
+                transition: all 0.3s ease;
+                transform: translateX(100%);
+            `;
+            
+            notification.style.background = type === 'success' ? '#28a745' : '#dc3545';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+    // Update server stats
+    function updateStats() {
+        fetch('/status')
+            .then(response => response.json())
+            .then(data => {
+                    document.getElementById('clientCount').textContent = data.clients || 0;
+                    document.getElementById('sampleRate').textContent = data.sample_rate || 48000;
+                    document.getElementById('channels').textContent = data.channels || 2;
+                    document.getElementById('bufferSize').textContent = data.buffer_size || 0;
+                    document.getElementById('actualBufferSize').textContent = data.actual_buffer_size || 1024;
+                    document.getElementById('uptime').textContent = Math.floor(data.server_uptime || 0);
+                })
+                .catch(error => {
+                    console.log('Status fetch error:', error);
+                });
+        }
+        // Auto-restart if audio stops (handles network issues)
+        const audio = document.getElementById('audioStream');
+        audio.addEventListener('error', function() {
+            console.log('Audio error detected');
+            showNotification('Audio stream error. Attempting to reconnect...', 'error');
+            setTimeout(restartAudio, 2000);
+        });
+
+        audio.addEventListener('stalled', function() {
+            console.log('Audio stalled');
+            showNotification('Audio stream stalled. Reconnecting...', 'error');
+            setTimeout(restartAudio, 1000);
+        });
+
+        audio.addEventListener('waiting', function() {
+            console.log('Audio waiting for data');
+            showNotification('Buffering audio stream...', 'error');
+        });
+
+        audio.addEventListener('playing', function() {
+            console.log('Audio playing');
+            showNotification('Audio stream connected', 'success');
+        });
+
+        // Update stats every 3 seconds
+        setInterval(updateStats, 3000);
+        updateStats();
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            showNotification('Audio Relay Stream Ready', 'success');
+        });
+    </script>
+</body>
+</html>
