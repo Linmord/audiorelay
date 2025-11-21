@@ -2,7 +2,10 @@
 
 基于portaudio实现音频网络转发(TCP/HTTP)的Go服务端
 
---
+Source: https://blog.linmod.de/p/202511212335/
+
+<img width="1688" height="1402" alt="991ba979475d6882a7bed8adb08362cc" src="https://github.com/user-attachments/assets/2b32ffe4-071a-4707-a211-4d5e86d86b2f" />
+
 
 ### 可能的预先准备
 
@@ -10,7 +13,7 @@
 
 因macos不支持内录系统音频，您需要安装[BlackHole](https://github.com/ExistentialAudio/BlackHole) （audiorelay会自动选择BlackHole作为捕获输入源）
 
-若您的系统没有portaudio依赖导致运行异常您可能需要
+若您的系统没有[portaudio](https://github.com/gordonklaus/portaudio)依赖导致运行异常您可能需要
 
 ```bash
 brew install portaudio
