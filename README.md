@@ -1,6 +1,6 @@
 # audiorelay-beta
 
-基于[Portaudio](https://github.com/gordonklaus/portaudio)实现系统音频网转发(TCP/HTTP)的Go服务端
+基于[Portaudio](https://github.com/gordonklaus/portaudio)实现系统音频串流转发(TCP/HTTP)的Go服务端
 
 Earliest Source: https://blog.linmod.de/p/202511212335/
 
