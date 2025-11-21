@@ -5,6 +5,8 @@
 Earliest Source: https://blog.linmod.de/p/202511212335/
 
 <img width="1688" height="1402" alt="991ba979475d6882a7bed8adb08362cc" src="https://github.com/user-attachments/assets/2b32ffe4-071a-4707-a211-4d5e86d86b2f" />
+Web:
+<img width="2490" height="1673" alt="741e139e38144cde56f12a48f7153cf3" src="https://github.com/user-attachments/assets/879f2593-bb20-4589-8bbd-db49f51e5f63" />
 
 
 ### 可能的预先准备
