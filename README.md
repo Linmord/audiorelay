@@ -6,8 +6,7 @@ Earliest Source: https://blog.linmod.de/p/202511212335/
 
 <img width="1688" height="1402" alt="991ba979475d6882a7bed8adb08362cc" src="https://github.com/user-attachments/assets/2b32ffe4-071a-4707-a211-4d5e86d86b2f" />
 Web:
-<img width="2490" height="1673" alt="741e139e38144cde56f12a48f7153cf3" src="https://github.com/user-attachments/assets/879f2593-bb20-4589-8bbd-db49f51e5f63" />
-
+<img width="2490" height="1673" alt="741e139e38144cde56f12a48f7153cf3" src="https://github.com/user-attachments/assets/879f2593-bb20-4589-8bbd-db49f51e5f63" 
 
 ### 可能的预先准备
 
@@ -71,7 +70,7 @@ Audio Status: Streaming | Frames: 4719 | Buffer: 2048 | Total: 18.1 MB | Rate: 1
 
 | 指标        | 说明                 | 示例值             |
 | :---------- | :------------------- | :----------------- |
-| **Status**  | 区别无声帧时段  静音状态时自动节流     | Streamning/ Silent |
+| **Status**  | 区别静音帧  静音检测开启时自动节流     | Streamning/ Silent |
 | **Frames**  | 处理的音频帧总数     | 4719               |
 | **Buffer**  | 实际使用的缓冲区大小 | 2048               |
 | **Total**   | 累计传输数据量       | 18.1 MB            |

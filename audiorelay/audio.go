@@ -205,20 +205,23 @@ func (ac *AudioCapture) processAudio() {
 		ac.frameCount++
 		ac.statsMu.Unlock()
 
-		// Check if buffer contains meaningful audio data
-		isSilent := ac.isSilence(ac.buffer)
-		if isSilent {
-			silenceFrames++
-			ac.statsMu.Lock()
-			ac.silenceCount++
-			ac.statsMu.Unlock()
+		// Silence detection (optional)
+		isSilent := false
+		if ac.config.Processing.SilenceDetection {
+			isSilent = ac.isSilence(ac.buffer)
+			if isSilent {
+				silenceFrames++
+				ac.statsMu.Lock()
+				ac.silenceCount++
+				ac.statsMu.Unlock()
 
-			// Skip processing during extended silence to save bandwidth
-			if silenceFrames > 30 { // Skip if Silent for more than ~600ms
-				continue
+				// Skip processing during extended silence to save bandwidth
+				if silenceFrames > 30 {
+					continue
+				}
+			} else {
+				silenceFrames = 0
 			}
-		} else {
-			silenceFrames = 0
 		}
 
 		// Process audio data with high quality processing
@@ -241,20 +244,28 @@ func (ac *AudioCapture) processAudio() {
 			rate := float64(bytesTransferred) / time.Since(lastStats).Seconds() / 1024
 			totalFrames, totalBytes, totalSilence := ac.GetStats()
 
-			status := " Streaming"
-			if silenceFrames > 0 {
-				status = "  Silent"
+			status := "Streaming"
+			if ac.config.Processing.SilenceDetection && silenceFrames > 0 {
+				status = "Silent"
 			}
 
-			// 使用实际缓冲区大小显示信息
+			// Use actual buffer size for display
 			totalMB := float64(totalBytes) / 1024 / 1024
 			silencePercent := 0.0
-			if totalFrames > 0 {
+			if totalFrames > 0 && ac.config.Processing.SilenceDetection {
 				silencePercent = float64(totalSilence) / float64(totalFrames) * 100
 			}
 
-			fmt.Printf("Audio Status: %s | Frames: %d | Buffer: %d | Total: %.1f MB | Rate: %.1f KB/s | Silence: %.1f%%\n",
-				status, totalFrames, ac.actualBufferSize, totalMB, rate, silencePercent)
+			// Build status message
+			statusMsg := fmt.Sprintf("Audio Status: %s | Frames: %d | Buffer: %d | Total: %.1f MB | Rate: %.1f KB/s",
+				status, totalFrames, ac.actualBufferSize, totalMB, rate)
+
+			// Add silence percentage only if silence detection is enabled
+			if ac.config.Processing.SilenceDetection {
+				statusMsg += fmt.Sprintf(" | Silence: %.1f%%", silencePercent)
+			}
+
+			fmt.Println(statusMsg)
 
 			bytesTransferred = 0
 			lastStats = time.Now()

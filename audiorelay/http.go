@@ -266,10 +266,15 @@ func (hs *HTTPServer) handleStatus(w http.ResponseWriter, r *http.Request) {
 		"clients":            clientCount,
 		"sample_rate":        hs.config.Audio.SampleRate,
 		"channels":           hs.config.Audio.Channels,
-		"buffer_size":        hs.config.Audio.BufferSize, // 配置的缓冲区大小
-		"actual_buffer_size": actualBufferSize,           // 实际使用的缓冲区大小
-		"timestamp":          time.Now().Unix(),
-		"server_uptime":      time.Since(startTime).Seconds(),
+		"buffer_size":        hs.config.Audio.BufferSize,
+		"actual_buffer_size": actualBufferSize,
+		"processing": map[string]interface{}{
+			"silence_detection": hs.config.Processing.SilenceDetection,
+			"silence_threshold": hs.config.Processing.SilenceThreshold,
+			"volume_multiplier": hs.config.Processing.VolumeMultiplier,
+		},
+		"timestamp":     time.Now().Unix(),
+		"server_uptime": time.Since(startTime).Seconds(),
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -300,6 +305,10 @@ func (hs *HTTPServer) handleDebug(w http.ResponseWriter, r *http.Request) {
 		"audio_config": map[string]interface{}{
 			"sample_rate": hs.config.Audio.SampleRate,
 			"channels":    hs.config.Audio.Channels,
+		},
+		"processing": map[string]interface{}{
+			"silence_detection": hs.config.Processing.SilenceDetection,
+			"silence_threshold": hs.config.Processing.SilenceThreshold,
 		},
 	}
 

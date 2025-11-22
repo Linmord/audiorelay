@@ -10,13 +10,15 @@ audio:
   auto_select: false    # 选择系统默认输入设备
   prefer_blackhole: true
 
-processing:
-  silence_threshold: 1000
-  volume_multiplier: 1.0
-  clip_threshold: 28000
+processing:  #节流选项 服务端静音状态时休眠节流
+  silence_detection: false #是否开启静音检测
+  silence_threshold: 1000 #静音阈值
+  clip_threshold: 28000 #削波阈值 （-32768 - 32767）
+
+  volume_multiplier: 1.0 #音量增益 原始1.0
 
 protocols:
   tcp:
-    enabled: true  # TCP协议（如果需要的话）
+    enabled: true  # TCP协议（推荐）
   http:
-    enabled: true  # HTTP协议
+    enabled: true # HTTP协议

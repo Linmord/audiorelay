@@ -30,8 +30,9 @@ type AudioConfig struct {
 }
 
 type ProcessingConfig struct {
+	SilenceDetection bool    `mapstructure:"silence_detection"` // Enable/disable silence detection
 	SilenceThreshold int     `mapstructure:"silence_threshold"` // Silence detection threshold
-	VolumeMultiplier float64 `mapstructure:"volume_multiplier"` // Volume adjustment (0.0 to 1.0)
+	VolumeMultiplier float64 `mapstructure:"volume_multiplier"` // Volume adjustment
 	ClipThreshold    int16   `mapstructure:"clip_threshold"`    // Audio clipping threshold
 }
 
@@ -45,8 +46,8 @@ type ProtocolConfig struct {
 }
 
 type HTTPConfig struct {
-	Enabled    bool   `mapstructure:"enabled"`     // Enable HTTP server
-	StreamPath string `mapstructure:"stream_path"` // WebSocket stream path
+	Enabled bool `mapstructure:"enabled"` // Enable HTTP server
+	// StreamPath string `mapstructure:"stream_path"` // WebSocket stream path
 }
 
 // LoadConfig loads configuration using Viper
@@ -90,20 +91,20 @@ func setDefaults(v *viper.Viper) {
 	// Audio defaults
 	v.SetDefault("audio.sample_rate", 48000)
 	v.SetDefault("audio.channels", 2)
-	v.SetDefault("audio.buffer_size", 1024)
+	v.SetDefault("audio.buffer_size", 0)
 	v.SetDefault("audio.device_name", "")
 	v.SetDefault("audio.auto_select", false)
 	v.SetDefault("audio.prefer_blackhole", true)
 
 	// Processing defaults
+	v.SetDefault("processing.silence_detection", true) // Enable silence detection by default
 	v.SetDefault("processing.silence_threshold", 1000)
 	v.SetDefault("processing.volume_multiplier", 1.0)
-	v.SetDefault("processing.clip_threshold", 32767)
+	v.SetDefault("processing.clip_threshold", 28000)
 
 	// Protocols defaults
 	v.SetDefault("protocols.tcp.enabled", true)
 	v.SetDefault("protocols.http.enabled", true)
-	v.SetDefault("protocols.http.stream_path", "/ws")
 }
 
 // Validate checks if configuration parameters are valid
@@ -123,9 +124,9 @@ func (c *Config) Validate() error {
 	if c.Audio.BufferSize < 0 {
 		return fmt.Errorf("buffer size must be positive")
 	}
-	if c.Protocols.HTTP.StreamPath == "" {
-		return fmt.Errorf("HTTP stream path cannot be empty")
-	}
+	// if c.Protocols.HTTP.StreamPath == "" {
+	// 	return fmt.Errorf("HTTP stream path cannot be empty")
+	// }
 	return nil
 }
 
