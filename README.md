@@ -12,7 +12,7 @@ Web:
 
 ⚠️：仅在macos13.7.4 / windows11 上通过
 
-因macos不支持内录系统音频，您需要安装[BlackHole](https://github.com/ExistentialAudio/BlackHole) （audiorelay会自动选择BlackHole作为捕获输入源）
+因macos不支持内录系统音频，您需要安装[BlackHole](https://github.com/ExistentialAudio/BlackHole) （audiorelay默认配置中开启了预选BlackHole作为捕获输入源）
 
 若您的系统没有[Portaudio](https://www.portaudio.com/)依赖导致运行异常您可能需要以下帮助
 
