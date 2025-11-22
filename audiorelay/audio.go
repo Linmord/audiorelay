@@ -82,35 +82,44 @@ func (ac *AudioCapture) Initialize(device *portaudio.DeviceInfo) error {
 
 // calculateOptimalBufferSize calculates the optimal buffer size for smooth streaming
 func (ac *AudioCapture) calculateOptimalBufferSize() int {
-	// 如果配置了 buffer_size 且大于0，使用配置的值
+	// 如果配置了 buffer_size 且大于0，使用配置的值（假设配置的是每声道样本数）
 	if ac.config.Audio.BufferSize > 0 {
 		return ac.config.Audio.BufferSize * ac.config.Audio.Channels
 	}
 
-	// 如果 buffer_size 为0或未设置，自动计算最佳大小
-	// Target around 20ms of audio for good balance between latency and stability
-	targetLatency := 0.02 // 20ms
-	targetSamples := int(ac.config.Audio.SampleRate * targetLatency)
+	// 自动计算：目标20ms延迟
+	const targetLatencyMs = 25.0
+	targetLatencySeconds := targetLatencyMs / 1000.0
 
-	// Round to nearest power of two for better performance
+	// 计算每声道需要的样本数
+	samplesPerChannel := int(ac.config.Audio.SampleRate * targetLatencySeconds)
+
+	// 调整为2的幂次方（硬件友好）
+	optimalSamplesPerChannel := roundToPowerOfTwo(samplesPerChannel, 256, 2048)
+
+	// 总缓冲区大小 = 每声道样本数 × 声道数
+	totalBufferSize := optimalSamplesPerChannel * ac.config.Audio.Channels
+
+	log.Printf("  Buffer calculation: %.0fHz × %.1fms = %d samples/channel → %d total",
+		ac.config.Audio.SampleRate, targetLatencyMs, optimalSamplesPerChannel, totalBufferSize)
+
+	return totalBufferSize
+}
+
+// roundToPowerOfTwo 将数值调整为2的幂次方，并在指定范围内
+func roundToPowerOfTwo(value, min, max int) int {
 	powerOfTwo := 1
-	for powerOfTwo < targetSamples {
+	for powerOfTwo < value {
 		powerOfTwo <<= 1
 	}
 
-	// Ensure minimum and maximum bounds
-	if powerOfTwo < 256 {
-		powerOfTwo = 256
+	if powerOfTwo < min {
+		return min
 	}
-	if powerOfTwo > 2048 {
-		powerOfTwo = 2048
+	if powerOfTwo > max {
+		return max
 	}
-
-	result := powerOfTwo * ac.config.Audio.Channels
-	log.Printf("  Auto-calculated buffer size: %d samples (from %d Hz, %d channels)",
-		result, int(ac.config.Audio.SampleRate), ac.config.Audio.Channels)
-
-	return result
+	return powerOfTwo
 }
 
 // GetActualBufferSize returns the actual buffer size being used
@@ -192,11 +201,11 @@ func (ac *AudioCapture) processAudio() {
 		if err := ac.stream.Read(); err != nil {
 			log.Printf("Audio read error: %v", err)
 			consecutiveErrors++
-			if consecutiveErrors > 10 {
+			if consecutiveErrors > 20 {
 				log.Printf("Too many consecutive errors, stopping audio capture")
 				break
 			}
-			time.Sleep(10 * time.Millisecond)
+			time.Sleep(1 * time.Millisecond)
 			continue
 		}
 		consecutiveErrors = 0

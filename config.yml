@@ -5,7 +5,7 @@ server:
 audio:
   sample_rate: 48000    # 采样率
   channels: 2           # 声道数
-  buffer_size: 0     # 缓冲区大小 为0时自动计算
+  buffer_size:  1025   # 缓冲区大小 乘以声道数 为0时自动计算 最大4096
   device_name: ""       # 指定设备名称
   auto_select: false    # 选择系统默认输入设备
   prefer_blackhole: true

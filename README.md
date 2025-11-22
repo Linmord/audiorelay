@@ -8,6 +8,11 @@ Earliest Source: https://blog.linmod.de/p/202511212335/
 Web:
 <img width="2490" height="1673" alt="741e139e38144cde56f12a48f7153cf3" src="https://github.com/user-attachments/assets/879f2593-bb20-4589-8bbd-db49f51e5f63" 
 
+### 更新计划
+v0.011 
+目前来说TCP&HTTP就已经满足我的要求了
+也暂时没有什么大的bug，如果你遇到什么问题欢迎提交issue;
+
 ### 可能的预先准备
 
 ⚠️：仅在macos13.7.4 / windows11 上通过
