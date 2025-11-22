@@ -44,6 +44,9 @@ func main() {
 	}
 }
 ```
+### 接收端
+[playback](https://github.com/Linmord/playback)
+ 为您配套提供了一个支持tcp&http音频串流测试播放器(目前在windows下编译通过）
 
 ### 目录结构
 
